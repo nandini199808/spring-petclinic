@@ -8,18 +8,20 @@ variables:
   imageName: 'petclinic-app'
 
 steps:
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '17'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'AzureStorage'
+- script: |
+    # Install Java 17 using package manager (Ubuntu/Debian)
+    sudo apt-get update
+    sudo apt-get install -y openjdk-17-jdk
+    echo "##vso[task.setvariable variable=JAVA_HOME]$(readlink -f /usr/bin/java | sed 's:/bin/java::')"
+    java -version
+  displayName: 'Install Java 17'
 
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.17'
+    javaHomeOption: 'Path'
+    jdkDirectory: '$(JAVA_HOME)'
     mavenOptions: '-Xmx1024m'
 
 - task: Docker@2
