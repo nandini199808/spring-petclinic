@@ -19,9 +19,9 @@ steps:
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package'
-    javaHomeOption: 'Path'
-    jdkDirectory: '$(JAVA_HOME)'
+    goals: 'clean package -DskipTests'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.17'
     mavenOptions: '-Xmx1024m'
 
 - task: Docker@2
