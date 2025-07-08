@@ -1,0 +1,27 @@
+trigger:
+- main
+
+pool:
+  name: 'mypool'  # your self-hosted agent pool
+
+stages:
+- stage: Deploy
+  jobs:
+  - job: DeployToACI
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: 'azure-coffeejunkie-service-conn'  # name of service connection
+        scriptType: bash
+        scriptLocation: inlineScript
+        inlineScript: |
+          az container create \
+            --resource-group coffeejunkie-rg \
+            --name petclinic-container \
+            --image azurecoffeejunkie.azurecr.io/petclinic-app:latest \
+            --dns-name-label petclinic-coffeejunkie \
+            --ports 8080 \
+            --registry-login-server azurecoffeejunkie.azurecr.io \
+            --registry-username $(ACR_USERNAME) \
+            --registry-password $(ACR_PASSWORD)
+
