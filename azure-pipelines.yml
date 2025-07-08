@@ -22,7 +22,6 @@ steps:
     jdkVersionOption: '1.11'
     mavenOptions: '-Xmx1024m'
 
-
 - task: Docker@2
   inputs:
     containerRegistry: 'acr-docker-conn'
@@ -32,4 +31,3 @@ steps:
     tags: |
       latest
       $(Build.BuildId)
-
