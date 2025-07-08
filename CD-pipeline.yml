@@ -11,7 +11,7 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'azure-coffeejunkie-service-conn'  # name of service connection
+        azureSubscription: 'petapp-acr-conn'  # name of service connection
         scriptType: bash
         scriptLocation: inlineScript
         inlineScript: |
