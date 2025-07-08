@@ -1,21 +1,18 @@
 trigger:
 - main
 
-pool:  
+pool:
   name: 'mypool'
 
 variables:
   imageName: 'petclinic-app'
 
-
 steps:
-
 - task: JavaToolInstaller@0
   inputs:
     versionSpec: '11'
-    jdkArchitecture: 'x64'
+    jdkArchitectureOption: 'x64'
     jdkSourceOption: 'PreInstalled'
-
 
 - task: Maven@3
   inputs:
@@ -24,6 +21,7 @@ steps:
     javaHomeOption: 'JDKVersion'
     jdkVersionOption: '1.11'
     mavenOptions: '-Xmx1024m'
+
 
 - task: Docker@2
   inputs:
