@@ -50,3 +50,6 @@ _site/
 *.css
 !petclinic.css
 **/.terraform/
+terraform/main.tf
+terraform/terraform.tfstate
+terraform/terraform.tfstate.backup
