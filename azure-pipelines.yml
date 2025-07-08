@@ -1,0 +1,29 @@
+trigger:
+- main
+
+variables:
+  imageName: coffeejunkie-app
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean package'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.11'
+    mavenOptions: '-Xmx1024m'
+
+- task: Docker@2
+  inputs:
+    containerRegistry: '<petapp-acr-conn>'
+    repository: '$(imageName)'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
+    tags: |
+      latest
+      $(Build.BuildId)
+
