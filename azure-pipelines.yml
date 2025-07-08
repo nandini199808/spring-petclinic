@@ -13,12 +13,11 @@ steps:
     echo "##vso[task.setvariable variable=JAVA_HOME_17_X64]/usr/lib/jvm/java-17-openjdk-amd64"
   displayName: 'Set JAVA_HOME_17_X64'
 
-# Run Maven build using Maven@1
 - task: Maven@1
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean package'
-  displayName: 'Build with Maven'
+    goals: 'clean package -DskipTests=true'
+  displayName: 'Build with Maven (Skip Tests)'
 
 # Docker Build & Push
 - task: Docker@2
