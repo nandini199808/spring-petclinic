@@ -20,7 +20,7 @@ steps:
 
 - task: Docker@2
   inputs:
-    containerRegistry: 'petapp-acr-conn'
+    containerRegistry: 'acr-docker-conn'
     repository: '$(imageName)'
     command: 'buildAndPush'
     Dockerfile: '**/Dockerfile'
