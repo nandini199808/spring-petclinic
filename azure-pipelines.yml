@@ -1,11 +1,12 @@
 trigger:
 - main
 
-variables:
-  imageName: coffeejunkie-app
+pool:  
+  name: 'mypool'
 
-pool:
-  vmImage: 'ubuntu-latest'
+variables:
+  imageName: 'petclinic-app'
+
 
 steps:
 
