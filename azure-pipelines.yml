@@ -8,17 +8,12 @@ variables:
   imageName: 'petclinic-app'
 
 steps:
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '11'
-    jdkArchitecture: 'x64'
-
 - task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     goals: 'clean package'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.11'
+    javaHomeOption: 'Path'
+    jdkDirectory: '$(JAVA_HOME_11_X64)'
     mavenOptions: '-Xmx1024m'
 
 - task: Docker@2
