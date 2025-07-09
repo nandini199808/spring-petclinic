@@ -2,7 +2,10 @@ trigger:
 - main
 
 pool:
-  name: 'mypool'  # your self-hosted agent pool
+  name: 'mypool'  # Your self-hosted agent pool
+
+variables:
+- group: acr-secrets  # Securely injected ACR credentials
 
 stages:
 - stage: Deploy
@@ -11,20 +14,19 @@ stages:
     steps:
     - task: AzureCLI@2
       inputs:
-        azureSubscription: 'azure-coffeejunkie-service-conn'  # name of service connection
-        scriptType: bash
-        scriptLocation: inlineScript
+        azureSubscription: 'azure-coffeejunkie-service-conn'
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
         inlineScript: |
           az container create \
-            --resource-group coffeejunkie-rg \
-            --name petclinic-container \
-            --image azurecoffeejunkie.azurecr.io/petclinic-app:latest \
-            --dns-name-label petclinic-coffeejunkie \
-            --ports 8080 \
-            --registry-login-server azurecoffeejunkie.azurecr.io \
+            --resource-group my-rg \
+            --name my-app \
+            --image coffeejunkieacr.azurecr.io/petclinic-app:latest \
+            --registry-login-server coffeejunkieacr.azurecr.io \
             --registry-username $(ACR_USERNAME) \
-            --registry-password $(ACR_PASSWORD)
-
-            variables:
-            - group: acr-secrets
-
+            --registry-password $(ACR_PASSWORD) \
+            --cpu 1 \
+            --memory 1 \
+            --dns-name-label coffeejunkie-app \
+            --ports 8080
+      displayName: 'Deploy to Azure Container Instance'
