@@ -4,34 +4,37 @@ trigger:
 pool:
   name: 'mypool' 
 
+variables:
+- group: acr-secrets  # registry-username and registry-password should be defined here
+
 stages:
 - stage: Deploy
   jobs:
   - job: DeployToACI
+    displayName: 'Deploy to Azure Container Instance'
     steps:
     - task: AzureCLI@2
+      displayName: 'Deploy ACI via Azure CLI'
       inputs:
         azureSubscription: 'azure-coffeejunkie-service-conn'
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-           # Deploy container to ACI
-           az container create \
-             --resource-group coffeejunkie-rg \
-             --name coffeejunkie \
-             --image coffeejunkieacr.azurecr.io/coffeejunkie-app:v1 \
-             --registry-login-server coffeejunkieacr.azurecr.io \
-             --registry-username $(ACR_USERNAME) \
-             --registry-password $(ACR_PASSWORD) \
-             --cpu 2 \
-             --memory 4 \
-             --dns-name-label coffeejunkie-app \
-             --ports 8080
+          echo "Deleting existing container instance..."
+          az container delete \
+            --name my-app-container \
+            --resource-group my-resource-group \
+            --yes || true
 
-      displayName: 'Deploy to Azure Container Instance'
-      env:
-        ACR_USERNAME: $(ACR_USERNAME)
-        ACR_PASSWORD: $(ACR_PASSWORD)
-
-variables:
-- group: acr-secrets  
+          echo "Creating new container instance with custom CPU and memory..."
+          az container create \
+            --resource-group my-resource-group \
+            --name my-app-container \
+            --image myregistry.azurecr.io/my-app:latest \
+            --cpu 2 \
+            --memory 3 \
+            --dns-name-label my-app-dns-name \
+            --ports 8080 \
+            --registry-login-server myregistry.azurecr.io \
+            --registry-username $(registry-username) \
+            --registry-password $(registry-password)
