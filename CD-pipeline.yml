@@ -2,10 +2,7 @@ trigger:
 - main
 
 pool:
-  name: 'mypool'  # Your self-hosted agent pool
-
-variables:
-- group: acr-secrets  # Securely injected ACR credentials
+  name: 'mypool'  # your self-hosted agent pool
 
 stages:
 - stage: Deploy
@@ -19,9 +16,9 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az container create \
-            --resource-group coffeejunkie-rg \
-            --name my-app \
-            --image coffeejunkieacr.azurecr.io/petclinic-app:latest \
+            --resource-group coffeejunkie-rg \  # 🔁 Change to your actual RG name
+            --name coffeejunkie \
+            --image coffeejunkieacr.azurecr.io/coffeejunkie-app:v1 \
             --registry-login-server coffeejunkieacr.azurecr.io \
             --registry-username $(ACR_USERNAME) \
             --registry-password $(ACR_PASSWORD) \
@@ -30,3 +27,9 @@ stages:
             --dns-name-label coffeejunkie-app \
             --ports 8080
       displayName: 'Deploy to Azure Container Instance'
+      env:
+        ACR_USERNAME: $(ACR_USERNAME)
+        ACR_PASSWORD: $(ACR_PASSWORD)
+
+variables:
+- group: acr-secrets  # contains ACR_USERNAME and ACR_PASSWORD
