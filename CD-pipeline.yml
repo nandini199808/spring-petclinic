@@ -19,7 +19,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az container create \
-            --resource-group my-rg \
+            --resource-group coffeejunkie-rg \
             --name my-app \
             --image coffeejunkieacr.azurecr.io/petclinic-app:latest \
             --registry-login-server coffeejunkieacr.azurecr.io \
