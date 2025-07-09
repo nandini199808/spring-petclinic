@@ -16,7 +16,7 @@ stages:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az container create \
-            --resource-group coffeejunkie-rg \  # 🔁 Change to your actual RG name
+            --resource-group coffeejunkie-rg \  
             --name coffeejunkie \
             --image coffeejunkieacr.azurecr.io/coffeejunkie-app:v1 \
             --registry-login-server coffeejunkieacr.azurecr.io \
