@@ -15,7 +15,6 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          inlineScript: |
            # Deploy container to ACI
            az container create \
              --resource-group coffeejunkie-rg \
@@ -24,8 +23,8 @@ stages:
              --registry-login-server coffeejunkieacr.azurecr.io \
              --registry-username $(ACR_USERNAME) \
              --registry-password $(ACR_PASSWORD) \
-             --cpu 1 \
-             --memory 1 \
+             --cpu 2 \
+             --memory 4 \
              --dns-name-label coffeejunkie-app \
              --ports 8080
 
