@@ -2,7 +2,7 @@ trigger:
 - main
 
 pool:
-  name: 'mypool'  # your self-hosted agent pool
+  name: 'mypool' 
 
 stages:
 - stage: Deploy
@@ -15,21 +15,24 @@ stages:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az container create \
-            --resource-group coffeejunkie-rg \  
-            --name coffeejunkie \
-            --image coffeejunkieacr.azurecr.io/coffeejunkie-app:v1 \
-            --registry-login-server coffeejunkieacr.azurecr.io \
-            --registry-username $(ACR_USERNAME) \
-            --registry-password $(ACR_PASSWORD) \
-            --cpu 1 \
-            --memory 1 \
-            --dns-name-label coffeejunkie-app \
-            --ports 8080
+          inlineScript: |
+           # Deploy container to ACI
+           az container create \
+             --resource-group coffeejunkie-rg \
+             --name coffeejunkie \
+             --image coffeejunkieacr.azurecr.io/coffeejunkie-app:v1 \
+             --registry-login-server coffeejunkieacr.azurecr.io \
+             --registry-username $(ACR_USERNAME) \
+             --registry-password $(ACR_PASSWORD) \
+             --cpu 1 \
+             --memory 1 \
+             --dns-name-label coffeejunkie-app \
+             --ports 8080
+
       displayName: 'Deploy to Azure Container Instance'
       env:
         ACR_USERNAME: $(ACR_USERNAME)
         ACR_PASSWORD: $(ACR_PASSWORD)
 
 variables:
-- group: acr-secrets  # contains ACR_USERNAME and ACR_PASSWORD
+- group: acr-secrets  
